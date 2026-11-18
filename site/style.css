@@ -1,0 +1,511 @@
+/* Colours: light by default, dark when the device prefers it (unless the
+   toggle in header.php forced "light"), or when the toggle forced "dark".
+   Same variable names/mechanism as the Kampeerweekeinde project. */
+:root {
+    --bg: #ffffff;
+    --text: #222222;
+    --heading: #2c3e50;
+    --muted: #7a7f87;
+    --border: #d8dce2;
+    --hover-bg: #eef1f5;
+    --active-bg: #3b6fa0;
+    --active-text: #ffffff;
+    --link: #2563a0;
+    --row-border: #dddddd;
+    --th-bg: #f5f6f8;
+    --danger: #aa3333;
+    --ok-bg: #e4f3e4;
+    --ok-border: #99cc99;
+    --err-bg: #fbe4e4;
+    --err-border: #cc9999;
+    --accent: #3b6fa0;
+    --box-bg: #fbfcfe;
+    color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg: #16181b;
+        --text: #e4e0d4;
+        --heading: #9fc1e8;
+        --muted: #9aa0a8;
+        --border: #3a3e44;
+        --hover-bg: #232629;
+        --active-bg: #3b6fa0;
+        --active-text: #ffffff;
+        --link: #6ea8e0;
+        --row-border: #33363a;
+        --th-bg: #202327;
+        --danger: #ff8f85;
+        --ok-bg: #1e331f;
+        --ok-border: #4b7a4b;
+        --err-bg: #3b1f1f;
+        --err-border: #8a4b4b;
+        --accent: #3b6fa0;
+        --box-bg: #1d2024;
+        color-scheme: dark;
+    }
+}
+:root[data-theme="dark"] {
+    --bg: #16181b;
+    --text: #e4e0d4;
+    --heading: #9fc1e8;
+    --muted: #9aa0a8;
+    --border: #3a3e44;
+    --hover-bg: #232629;
+    --active-bg: #3b6fa0;
+    --active-text: #ffffff;
+    --link: #6ea8e0;
+    --row-border: #33363a;
+    --th-bg: #202327;
+    --danger: #ff8f85;
+    --ok-bg: #1e331f;
+    --ok-border: #4b7a4b;
+    --err-bg: #3b1f1f;
+    --err-border: #8a4b4b;
+    --accent: #3b6fa0;
+    --box-bg: #1d2024;
+    color-scheme: dark;
+}
+
+body {
+    font-family: system-ui, sans-serif;
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    color: var(--text);
+    background: var(--bg);
+}
+
+h1 { margin-top: 0; }
+
+.site-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 2px solid var(--border);
+}
+.site-header h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: var(--heading);
+}
+.theme-toggle {
+    margin-left: auto;
+    align-self: center;
+    padding: 0.3rem 0.7rem;
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--heading);
+    background: transparent;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    white-space: nowrap;
+}
+.theme-toggle:hover { background: var(--hover-bg); }
+
+.site-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--border);
+}
+.site-nav .nav-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.site-nav a {
+    text-decoration: none;
+    color: var(--heading);
+    font-weight: 600;
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+}
+.site-nav a:hover { background: var(--hover-bg); }
+.site-nav a.active {
+    background: var(--active-bg);
+    color: var(--active-text);
+}
+
+a { color: var(--link); }
+
+.flash {
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+.flash-ok { background: var(--ok-bg); border: 1px solid var(--ok-border); }
+.flash-error { background: var(--err-bg); border: 1px solid var(--err-border); }
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-width: 480px;
+}
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-weight: 600;
+}
+input, select, textarea, button {
+    font: inherit;
+}
+button {
+    align-self: flex-start;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+}
+
+/* PIN page (pin.php): box centred in the remaining screen space */
+.pin-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 55vh;
+}
+.pin-box {
+    width: 100%;
+    max-width: 320px;
+    padding: 1.5rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--box-bg);
+    text-align: center;
+}
+.pin-box h2 { margin-top: 0; color: var(--heading); }
+.pin-box form { margin: 0 auto; align-items: stretch; }
+.pin-box label { align-items: center; }
+.pin-box input {
+    width: 8ch;
+    text-align: center;
+    font-size: 1.5rem;
+    letter-spacing: 0.3em;
+}
+.pin-box button { align-self: center; }
+
+.board-hint { color: var(--muted); max-width: 640px; }
+
+/* Lettertypes voor de tegels. Alle vijf zelf gehost uit fonts/ (Google
+   Fonts, OFL-licentie, zie fonts/OFL-*.txt), zodat het bord ook zonder
+   internetverbinding goed blijft tonen. Welke er actief is, is een
+   bordinstelling (bericht.php -> settings-tabel) die als klasse
+   "font-<sleutel>" op .board-grid komt; zie de font-*-blokken verderop.
+
+   "Fjalla One" (standaard) - stevige, smalle blokletters,
+   gekozen na vergelijking met enkele andere kandidaten (font-preview.php).
+   Zelf gehost zodat het bord ook zonder internetverbinding goed blijft
+   tonen. Bestand: fonts/FjallaOne-Regular.ttf, licentie fonts/OFL-FjallaOne.txt */
+@font-face {
+    font-family: "Fjalla One";
+    src: url("fonts/FjallaOne-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Oswald";
+    src: url("fonts/Oswald-Variable.ttf") format("truetype");
+    font-weight: 200 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Bebas Neue";
+    src: url("fonts/BebasNeue-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Anton";
+    src: url("fonts/Anton-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Space Mono";
+    src: url("fonts/SpaceMono-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Saira Condensed";
+    src: url("fonts/SairaCondensed-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Orbitron";
+    src: url("fonts/Orbitron-Variable.ttf") format("truetype");
+    font-weight: 400 900;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    /* Puntmatrix-letters, lijkt op een led-bord */
+    font-family: "Doto";
+    src: url("fonts/Doto-Variable.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* --- Vestaboard-achtig bord: 24 kolommen x 6 regels --- */
+:root {
+    --board-bg: #05060a;
+    --tile-bg: #1b1d20;
+    --tile-glyph: #f4f1e8;
+    --tile-radius: 6px;
+    --tile-gap: 0.28vw;
+    --tile-color-red: #c0392b;
+    --tile-color-orange: #d9752b;
+    --tile-color-yellow: #d4b32a;
+    --tile-color-green: #3a7d44;
+    --tile-color-blue: #2f5fa8;
+    --tile-color-purple: #6a3d9a;
+    --tile-color-white: #e9e7df;
+    --tile-color-black: #15161a;
+    --board-frame: #000;
+    --board-shadow: rgba(0, 0, 0, 0.6);
+    --tile-edge: rgba(255, 255, 255, 0.05);
+}
+
+/* Bordthema (instelling in bericht.php, zie BOARD_THEMES in board.php). De
+   klasse board-theme-<dark|light|auto> staat op .board-grid en in index.php
+   ook op <body>, zodat de pagina-achtergrond meekleurt. Donker = de
+   standaardwaarden hierboven; licht = witte tegels met zwarte letters;
+   auto = licht als het apparaat op licht staat, anders donker. Los van de
+   licht/donker-knop van de site zelf (header.php). */
+.board-theme-light {
+    --board-bg: #f4f3ef;
+    --board-frame: #d4d2ca;
+    --board-shadow: rgba(0, 0, 0, 0.12);
+    --tile-bg: #ffffff;
+    --tile-glyph: #111214;
+    --tile-edge: rgba(0, 0, 0, 0.08);
+}
+@media (prefers-color-scheme: light) {
+    .board-theme-auto {
+        --board-bg: #f4f3ef;
+        --board-frame: #d4d2ca;
+        --board-shadow: rgba(0, 0, 0, 0.12);
+        --tile-bg: #ffffff;
+        --tile-glyph: #111214;
+        --tile-edge: rgba(0, 0, 0, 0.08);
+    }
+}
+
+/* index.php: volledig scherm, geen sitechrome. Kleuren volgen het
+   bordthema hierboven. */
+.board-page {
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    min-height: 100vh;
+    background: var(--board-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.board-wrap { overflow-x: auto; padding-bottom: 0.5rem; }
+
+.board-grid {
+    /* --grid-rows/--grid-cols komen van render_grid() in board.php (op basis
+       van BOARD_ROWS uit config.php), zodat het aantal regels instelbaar is
+       zonder deze stylesheet aan te hoeven passen. 6/24 hieronder zijn alleen
+       terugvalwaarden. */
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols, 24), 1fr);
+    grid-template-rows: repeat(var(--grid-rows, 6), 1fr);
+    gap: var(--tile-gap);
+    /* box-sizing: zonder dit telt de padding hieronder NIET mee in de
+       breedte, waardoor het bord alsnog iets breder wordt dan zijn kolom
+       en rechts blijft afsnijden. */
+    box-sizing: border-box;
+    /* Breedte relatief aan de eigen kolom (bericht.php: max. 960px zoals de
+       rest van de site), niet aan het hele venster - zie .board-page
+       hieronder voor index.php, dat wél de volle vw/vh mag gebruiken. */
+    width: 100%;
+    aspect-ratio: var(--grid-cols, 24) / var(--grid-rows, 6);
+    padding: 1vw;
+    background: var(--board-frame);
+    border-radius: 10px;
+    /* Perspectief voor de tegels hieronder, zodat de flip-animatie echt
+       "kantelt" i.p.v. een platte verticale samendrukking te zijn. */
+    perspective: 70vw;
+}
+.board-page .board-grid {
+    width: min(96vw, 180vh);
+    box-shadow: 0 0 60px var(--board-shadow) inset;
+}
+
+.tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    /* Afgesteld op Fjalla One's eigen lettermetrics (uitgelezen uit het
+       font-bestand), die een kleine verschuiving omlaag nodig hebben. Deze
+       twee waarden mogen los van elkaar bijgesteld worden: top verhogen (of
+       bottom verlagen) duwt de letters omlaag, en omgekeerd omhoog. */
+    --tile-pad-top: 10%;
+    --tile-pad-bottom: 2%;
+    padding: calc(var(--tile-pad-top) + var(--font-pad-top, 0em)) 0 calc(var(--tile-pad-bottom) + var(--font-pad-bottom, 0em)) 0;
+    background: var(--tile-bg);
+    border-radius: var(--tile-radius);
+    box-shadow: inset 0 0 0 1px var(--tile-edge), 0 1px 0 var(--board-shadow);
+    font-family: var(--tile-font, "Fjalla One"), "Courier New", monospace;
+    font-weight: var(--tile-font-weight, 400);
+    line-height: 1;
+    color: var(--tile-glyph);
+    font-size: clamp(0.5rem, 2.5vw, 1.8rem);
+    user-select: none;
+}
+.tile-emoji { font-size: clamp(0.5rem, 2.1vw, 1.5rem); }
+
+/* Per lettertype (klasse op .board-grid, zie BOARD_FONTS in board.php).
+   font-size-adjust maakt de hoofdletters van elk font even hoog als die van
+   Fjalla One (cap height 0.834 em), zodat ze allemaal op dezelfde manier in
+   de tegel passen. --font-pad-top/-bottom corrigeren de verticale positie
+   t.o.v. Fjalla One; berekend uit de lettermetrics van elk font-bestand
+   (ascent/descent/cap height). Net als bij --tile-pad-top: top verhogen duwt
+   de letters omlaag, bottom verhogen duwt ze omhoog. Alleen op .tile-char,
+   zodat emoticon-tegels er niet door veranderen. */
+.board-grid .tile-char { font-size-adjust: cap-height 0.834; }
+.font-oswald .tile-char {
+    --tile-font: "Oswald";
+    --tile-font-weight: 500;
+    --font-pad-bottom: 0.17em;
+}
+.font-bebas-neue .tile-char {
+    --tile-font: "Bebas Neue";
+    --font-pad-top: 0.045em;
+}
+.font-anton .tile-char {
+    --tile-font: "Anton";
+    --font-pad-bottom: 0.06em;
+}
+.font-space-mono .tile-char {
+    --tile-font: "Space Mono";
+    --tile-font-weight: 700;
+    --font-pad-bottom: 0.15em;
+}
+.font-saira-condensed .tile-char {
+    --tile-font: "Saira Condensed";
+    --tile-font-weight: 600;
+    --font-pad-bottom: 0.085em;
+}
+.font-orbitron .tile-char {
+    --tile-font: "Orbitron";
+    --tile-font-weight: 700;
+    --font-pad-bottom: 0.12em;
+    /* Erg breed lettertype: kleiner dan de andere, anders lopen W/M/0 bij
+       smalle tegels buiten de tegel. */
+    font-size-adjust: cap-height 0.68;
+}
+.font-doto .tile-char {
+    --tile-font: "Doto";
+    --tile-font-weight: 800;
+    --font-pad-bottom: 0.075em;
+}
+.tile-color-red { background: var(--tile-color-red); }
+.tile-color-orange { background: var(--tile-color-orange); }
+.tile-color-yellow { background: var(--tile-color-yellow); }
+.tile-color-green { background: var(--tile-color-green); }
+.tile-color-blue { background: var(--tile-color-blue); }
+.tile-color-purple { background: var(--tile-color-purple); }
+.tile-color-white { background: var(--tile-color-white); }
+.tile-color-black { background: var(--tile-color-black); }
+
+[data-editable="1"] .tile { cursor: pointer; }
+.tile.selected { box-shadow: 0 0 0 3px var(--accent); }
+
+.tile.flipping {
+    animation: tile-flip 0.6s ease-in-out;
+    transform-origin: 50% 50%;
+}
+@keyframes tile-flip {
+    0% { transform: rotateX(0deg); filter: brightness(1); }
+    50% { transform: rotateX(-90deg); filter: brightness(0.55); }
+    100% { transform: rotateX(0deg); filter: brightness(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .tile.flipping { animation: none; }
+}
+
+.palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 1rem 0;
+    padding: 0.75rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--box-bg);
+    max-width: none;
+}
+.palette-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    align-items: center;
+}
+.palette-key, .palette-swatch, .palette-action {
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.4rem;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--text);
+}
+.palette-key:hover, .palette-swatch:hover, .palette-action:hover { background: var(--hover-bg); }
+.palette-swatch { width: 2rem; padding: 0; }
+.palette-swatch.tile-color-red { background: var(--tile-color-red); }
+.palette-swatch.tile-color-orange { background: var(--tile-color-orange); }
+.palette-swatch.tile-color-yellow { background: var(--tile-color-yellow); }
+.palette-swatch.tile-color-green { background: var(--tile-color-green); }
+.palette-swatch.tile-color-blue { background: var(--tile-color-blue); }
+.palette-swatch.tile-color-purple { background: var(--tile-color-purple); }
+.palette-swatch.tile-color-white { background: var(--tile-color-white); }
+.palette-swatch.tile-color-black { background: var(--tile-color-black); }
+.palette-emoji-key { font-size: 1.1rem; }
+
+/* Lettertypekeuze + verzendknoppen onder het palet (bericht.php) */
+#board-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+#board-form button { align-self: flex-end; }
+
+@media (max-width: 640px) {
+    body { margin: 1rem auto; }
+    .site-header h1 { font-size: 1.2rem; }
+    .theme-toggle { padding: 0.25rem 0.55rem; font-size: 0.85rem; }
+
+    /* 24 kolommen passen niet comfortabel op een telefoonbreedte: laat de
+       editor horizontaal scrollen i.p.v. de tegels onleesbaar klein maken. */
+    .board-wrap .board-grid {
+        width: max-content;
+        aspect-ratio: auto;
+        grid-auto-rows: 1.9rem;
+    }
+    .board-wrap .tile {
+        width: 1.9rem;
+        height: 1.9rem;
+        font-size: 1rem;
+    }
+}
