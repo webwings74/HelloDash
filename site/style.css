@@ -259,6 +259,23 @@ button {
     font-display: swap;
 }
 
+@font-face {
+    /* Tekent per teken een eigen flap-kaart met de letter erin uitgespaard
+       (zie .font-split-flap-tv hieronder). Geen OFL: geen licentiebestand. */
+    font-family: "Split-Flap TV";
+    src: url("fonts/SplitFlapTV-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Split-Flap TV BlackLine";
+    src: url("fonts/SplitFlapTVBlackLine-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* --- Vestaboard-achtig bord: 24 kolommen x 6 regels --- */
 :root {
     --board-bg: #05060a;
@@ -418,6 +435,19 @@ button {
     --tile-font-weight: 800;
     --font-pad-bottom: 0.075em;
 }
+/* Split-Flap TV: elke glyph is een complete flap-kaart (1,406 em hoog,
+   0,996 em breed, verticaal gecentreerd rond de regel) in de letterkleur,
+   met de letter uitgespaard in de tegelkleur. Daarom geen tegel-padding en
+   een kleinere cap-height (OS/2 capHeight = 0,700 em), zodat de kaart zo'n
+   90% van de tegelhoogte vult. */
+.font-split-flap-tv .tile-char,
+.font-split-flap-tv-blackline .tile-char {
+    --tile-pad-top: 0%;
+    --tile-pad-bottom: 0%;
+    font-size-adjust: cap-height 0.61;
+}
+.font-split-flap-tv .tile-char { --tile-font: "Split-Flap TV"; }
+.font-split-flap-tv-blackline .tile-char { --tile-font: "Split-Flap TV BlackLine"; }
 .tile-color-red { background: var(--tile-color-red); }
 .tile-color-orange { background: var(--tile-color-orange); }
 .tile-color-yellow { background: var(--tile-color-yellow); }

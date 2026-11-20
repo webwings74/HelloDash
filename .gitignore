@@ -1,3 +1,6 @@
 # Credentials voor hellodash.py (sjabloon: config-example.py)
 config.py
 __pycache__/
+
+# Echte gegevens van de site (sjabloon: site/config-example.php)
+site/config.php

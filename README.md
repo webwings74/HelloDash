@@ -16,24 +16,28 @@ voorbereid te worden.
 
 - `site/` — de daadwerkelijke website. Deze map is zelfstandig en is dus de
   map die naar de webserver gaat.
+- `hellodash.py` — command-line tool om berichten te plaatsen via de API
+  (zie "Command line" hieronder); `config-example.py` is het sjabloon voor
+  zijn `config.py`. Draait op je eigen computer, hoort niet op de webserver.
 - `hellodash.sql` — maakt de tabellen `messages` en `settings` aan. Opnieuw importeren is veilig (`CREATE TABLE IF NOT EXISTS`); doe dat ook na een update die een nieuwe tabel toevoegt.
 
 ### Bestanden in `site/`
 
 | Bestand | Doel |
 |---|---|
-| `config.php` | Databaseverbindingsgegevens, de pincode en `BOARD_ROWS` (aantal regels, standaard 6) (`config-example.php` is het sjabloon zonder echte gegevens) |
+| `config.php` | Databaseverbindingsgegevens, de pincode, `BOARD_ROWS` (aantal regels, standaard 6) en `API_KEY` (voor `api.php`). Staat niet in git: kopieer `config-example.php` naar `config.php` en vul de echte gegevens in |
 | `db.php` | Maakt de PDO-verbinding (`$pdo`) op basis van `config.php`; DSN-charset `utf8mb4` (er staan emoticons in het bord) |
 | `pin.php` | Pincodebeveiliging: elke wijziging (POST) wordt pas uitgevoerd na de juiste pincode; geladen via `helpers.php` |
 | `helpers.php` | Hulpfuncties: `h()` (escapen voor HTML), `redirect()`, laadt `pin.php` |
 | `header.php` / `nav.php` | Gedeeld titelblok + menubalk (Dashboard, Bericht plaatsen, Lettertypes) met licht/donker-themaknop. Alleen gebruikt door `bericht.php` en de pincodepagina — `index.php` heeft bewust geen sitechrome |
-| `style.css` | Opmaak: zelfde kleurvariabelen/thema-mechanisme als het Kampeerweekeinde-project, plus het bord/tegel-ontwerp |
-| `fonts/` | Lettertypes voor de tegels, allemaal zelf gehost (geen internetverbinding nodig tijdens het draaien) en van Google Fonts met OFL-licentie (`fonts/OFL-*.txt`): Fjalla One (standaard), Oswald, Bebas Neue, Anton, Space Mono, Saira Condensed, Orbitron en Doto. Zie "Lettertype" hieronder |
+| `style.css` | Opmaak: kleurvariabelen met licht/donker-thema voor de site, plus het bord/tegel-ontwerp |
+| `fonts/` | Lettertypes voor de tegels, allemaal zelf gehost (geen internetverbinding nodig tijdens het draaien). Van Google Fonts met OFL-licentie (`fonts/OFL-*.txt`): Fjalla One (standaard), Oswald, Bebas Neue, Anton, Space Mono, Saira Condensed, Orbitron en Doto. Daarnaast Split-Flap TV en Split-Flap TV BlackLine (`.ttf` en `.otf`), die geen OFL-licentie hebben. Zie "Lettertype" hieronder |
 | `board.php` | Kern van het bord: afmetingen (24x6), toegestane tekens/kleuren/emoticons, bordinstellingen (`BOARD_FONTS`, `BOARD_THEMES`, `board_font()`, `board_theme()`, `board_save_setting()`), `validate_grid()`, `render_grid()`, `latest_message()` — gedeeld door de editor en de weergave |
 | `bericht.php` | Pincode-beveiligde editor: klik een tegel, typ een teken of kies een kleur/emoticon uit het palet; slaat een nieuw bericht op. Bevat ook de keuze voor lettertype en thema van het bord |
 | `editor.js` | Interactie voor de editor: celselectie (klik of pijltjestoetsen), toetsenbord, palet, en de knoppen "Regel ⟵"/"Regel ⟶" om de regel van de geselecteerde tegel rond te schuiven (handig om tekst te centreren) |
 | `fonts.php` | Proefpagina met zo'n 35 kandidaat-lettertypes van Google Fonts op bordtegels, met eigen proeftekst en thema. Aanvinken + "Selectie kopiëren" levert een lijstje op om toe te voegen. Laadt de fonts rechtstreeks van Google, dus heeft (anders dan het bord) internet nodig |
 | `index.php` | Publieke, read-only volledig-scherm weergave van het huidige bericht |
+| `api.php` | JSON-API voor `hellodash.py`: `GET` geeft het huidige bericht en de instellingen, `POST` plaatst een bericht en/of wijzigt lettertype/thema. Vereist de header `X-API-Key`; uitgeschakeld zolang `API_KEY` in `config.php` ontbreekt. Zie "Command line" hieronder |
 | `check.php` | JSON-polling-endpoint (`{id, grid, font, theme}`) dat `index.php` elke paar seconden bevraagt |
 | `display.js` | Pollt `check.php`. Verandert een tegel van letter/cijfer/leesteken, dan flikkert hij razendsnel door alle tussenliggende tekens van het toetsenbord (zoals een echt flap-wiel, dat altijd maar één kant op draait) en landt met een kanteling; bij een kleur- of emoticon-wijziging blijft het bij die ene kanteling. Bij het laden of verversen van de pagina start het bord leeg en flapt het huidige bericht er op dezelfde manier in (`index.php` geeft het mee als `INITIAL_GRID`; `INTRO_DELAY_MS` in `display.js` is de pauze vooraf). Speelt bij elke stap een kort, zelf gesynthetiseerd "tik"-geluid af (Web Audio API, geen geluidsbestand nodig) — zie "Geluid" hieronder |
 
@@ -80,6 +84,16 @@ voeg een `@font-face` en een `.font-<sleutel> .tile-char`-blok toe in
 `font-size-adjust: cap-height 0.834` maakt de hoofdletters van elk font even
 hoog als die van Fjalla One; met `--font-pad-top`/`--font-pad-bottom` (in
 `em`) zet je de letters verticaal recht in de tegel.
+
+**Split-Flap TV** (en de variant **BlackLine**, met een dubbele lijn over de
+kaart) werkt anders dan de andere fonts: elk teken is een complete flap-kaart
+in de letterkleur, met de letter erin uitgespaard. Op het bord verschijnen
+dus kaartjes op de tegels (licht bij het donkere thema, zwart bij het
+lichte); lege tegels blijven gewone tegels. `style.css` zet daarom de
+tegel-padding uit en gebruikt een kleinere `font-size-adjust`. De
+fontbestanden bevatten geen copyright- of licentiegegevens en er zit geen
+licentiebestand bij: controleer de licentie bij de bron van het font
+voordat je het publiek gebruikt.
 
 ## Thema scherm
 
@@ -191,7 +205,8 @@ toegestane tekens/kleuren/emoji/fonts/thema's; `POST` met JSON
 ## Lokaal draaien
 
 ```
-cd ~/Projecten/MariaDB/HelloDash/site
+cp site/config-example.php site/config.php   # eenmalig, daarna invullen
+cd site
 php -S localhost:8000
 ```
 
@@ -200,7 +215,7 @@ Open `http://localhost:8000/bericht.php` om een bericht te maken, en
 
 ## Pincode
 
-Zelfde mechanisme als het Kampeerweekeinde-project: `pin.php` vangt elk
+`pin.php` vangt elk
 POST-verzoek af en vraagt om de pincode uit `config.php` (`PIN_CODE`,
 `PIN_TIMEOUT`). Na 5 foute pogingen vanaf hetzelfde IP-adres is wijzigen 15
 minuten geblokkeerd. Lezen (`index.php`, `check.php`) blijft voor iedereen
@@ -208,22 +223,22 @@ open, zonder pincode.
 
 ## Hosting
 
-Draait op webhosting van Hostnet.nl, met een eigen MariaDB-database bij
-Hostnet (`DB_HOST` staat daarom op `localhost`). Verhuist de site ooit naar
-de Synology (Web Station), dan draaien app en database ook daar op dezelfde
-machine — zie de commentaarregels boven de `DB_*`-constanten in
-`config.php`.
+Draait op gewone PHP-webhosting met MariaDB/MySQL. Staan site en database
+bij dezelfde provider, dan is `DB_HOST` meestal `localhost`. Verhuist de site
+ooit naar bijvoorbeeld een Synology (Web Station), dan draaien app en
+database ook daar op dezelfde machine — zie de commentaarregels boven de
+`DB_*`-constanten in `config-example.php`.
 
-**Let op:** `DB_NAME`/`DB_USER`/`DB_PASS` in `config.php` zijn identiek aan
-die van het Kampeerweekeinde-project — beide draaien op dezelfde Hostnet-
-database (één database per hostingaccount). De projecten delen dus geen
-bestanden, maar wél die ene database. `messages` botst niet met
-Kampeerweekeinde's tabellen (`bieren`, `wijnen`, `koelkasten`, enz.), maar
-een eventueel derde project in deze database moet ook een unieke tabelnaam
-kiezen.
+Veel hostingpakketten hebben maar één database per account, die je dan deelt
+met andere sites. Dat kan prima: HelloDash gebruikt alleen de tabellen
+`messages` en `settings`. Zorg wel dat geen ander project in dezelfde
+database tabellen met die namen gebruikt.
 
 ## Schema
 
-- `messages`: `id` (PK, auto-increment), `grid_json` (JSON van het 6x24
-  raster als tekst), `created_at`. Zie `hellodash.sql`, dat ook een
-  voorbeeldbericht ("HELLODASH") invoegt zolang de tabel nog leeg is.
+- `messages`: `id` (PK, auto-increment), `grid_json` (JSON van het
+  `BOARD_ROWS`x24 raster als tekst), `created_at`. Zie `hellodash.sql`, dat
+  ook een voorbeeldbericht ("HELLODASH", 6 regels) invoegt zolang de tabel
+  nog leeg is.
+- `settings`: `name` (PK) en `value`, voor de bordinstellingen `font` en
+  `theme`.

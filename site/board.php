@@ -36,6 +36,8 @@ const BOARD_FONTS = [
     'saira-condensed' => 'Saira Condensed',
     'orbitron' => 'Orbitron',
     'doto' => 'Doto',
+    'split-flap-tv' => 'Split-Flap TV',
+    'split-flap-tv-blackline' => 'Split-Flap TV BlackLine',
 ];
 const DEFAULT_FONT = 'fjalla-one';
 
